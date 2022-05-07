@@ -50,6 +50,13 @@ async function run() {
       const result = await productCollection.deleteOne(query);
       res.send(result);
     });
+    //delete a specific item
+    app.delete("/items/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      res.send(result);
+    });
     //my items collection api
     app.get("/items", async (req, res) => {
       const email = req?.query?.email;
