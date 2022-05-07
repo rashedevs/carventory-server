@@ -65,6 +65,30 @@ async function run() {
       const items = await cursor.toArray();
       res.send(items);
     });
+    //single product update api
+    app.put("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedProduct = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: {
+          name: updatedProduct.name,
+          img: updatedProduct.img,
+          email: updatedProduct.email,
+          description: updatedProduct.description,
+          supplier: updatedProduct.supplier,
+          quantity: updatedProduct.quantity,
+          price: updatedProduct.price,
+        },
+      };
+      const result = await productCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      res.send(result);
+    });
   } finally {
   }
 }
