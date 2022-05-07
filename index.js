@@ -1,42 +1,51 @@
-const express = require('express')
-const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb')
-require('dotenv').config()
-const port = process.env.PORT || 5000
-const app = express()
+const express = require("express");
+const cors = require("cors");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+require("dotenv").config();
+const port = process.env.PORT || 5000;
+const app = express();
 
 //middleware
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.et8bo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+});
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.et8bo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
-
-async function run(){
-try{
-    await client.connect()
-    const productCollection = client.db('carventory').collection('product')
+async function run() {
+  try {
+    await client.connect();
+    const productCollection = client.db("carventory").collection("product");
 
     //APIs.....
 
-    app.get('/product', async(req,res)=>{
-        const query = {}
-        const cursor = productCollection.find(query)
-        const products = await cursor.toArray()
-        res.send(products)
-    })
-
+    //get all data from db
+    app.get("/product", async (req, res) => {
+      const query = {};
+      const cursor = productCollection.find(query);
+      const products = await cursor.toArray();
+      res.send(products);
+    });
+    // find one by id
+    app.get("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const product = await productCollection.findOne(query);
+      res.send(product);
+    });
+  } finally {
+  }
 }
-finally{}
-}
-run().catch(console.dir)
+run().catch(console.dir);
 
+app.get("/", (req, res) => {
+  res.send("Carventory server is running");
+});
 
-app.get('/',(req,res)=>{
-    res.send('Carventory server is running')
-})
-
-app.listen(port,()=>{
-    console.log('Listening from', port)
-})
+app.listen(port, () => {
+  console.log("Listening from", port);
+});
