@@ -23,7 +23,7 @@ async function run() {
 
     //APIs.....
 
-    //get all data from db
+    // get all data from db
     app.get("/product", async (req, res) => {
       const query = {};
       const cursor = productCollection.find(query);
@@ -37,27 +37,27 @@ async function run() {
       const product = await productCollection.findOne(query);
       res.send(product);
     });
-    //post data from ui to db
+    // post data from ui to db
     app.post("/product", async (req, res) => {
       const newProduct = req.body;
       const result = await productCollection.insertOne(newProduct);
       res.send(result);
     });
-    //delete a specific data
+    // delete a specific data
     app.delete("/product/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await productCollection.deleteOne(query);
       res.send(result);
     });
-    //delete a specific item
+    // delete a specific item finding by id
     app.delete("/items/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await productCollection.deleteOne(query);
       res.send(result);
     });
-    //my items collection api
+    // my items collection api
     app.get("/items", async (req, res) => {
       const email = req?.query?.email;
       const query = { email };
@@ -65,7 +65,7 @@ async function run() {
       const items = await cursor.toArray();
       res.send(items);
     });
-    //single product update api
+    // single product update api
     app.put("/product/:id", async (req, res) => {
       const id = req.params.id;
       const updatedProduct = req.body;
