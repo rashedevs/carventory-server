@@ -61,7 +61,7 @@ async function run() {
       const product = await productCollection.findOne(query);
       res.send(product);
     });
-    // post data from ui to db
+    // post data from ui to database
     app.post("/product", async (req, res) => {
       const newProduct = req.body;
       const result = await productCollection.insertOne(newProduct);
