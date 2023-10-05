@@ -84,7 +84,7 @@ async function run() {
     });
     // my items collection api
     // app.get("/items", verifyJWT, async (req, res) => {
-    app.get("/items", verifyJWT, (req, res) => {
+    app.get("/items", (req, res) => {
       const decodedEmail = req.decoded.email;
       const email = req?.query?.email;
       if (email === decodedEmail) {
