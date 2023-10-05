@@ -34,7 +34,8 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
+    client.connect();
     const productCollection = client.db("carventory").collection("product");
 
     //AUTH....
